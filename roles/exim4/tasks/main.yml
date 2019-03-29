@@ -1,0 +1,5 @@
+- name: 'exim4 | copy config'
+  copy: 'src=../templates/update-exim4.conf.conf dest=/etc/exim4/update-exim4.conf.conf owner=root group=root mode=0644'
+
+- name: 'exim4 | restart service'
+  service: name=exim4 state=restarted

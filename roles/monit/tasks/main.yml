@@ -1,0 +1,8 @@
+- name: 'monit | copy config'
+  copy: 'src=../templates/monitrc dest=/etc/monit/monitrc owner=root group=root mode=0700'
+
+- name: 'monit | copy config'
+  copy: 'src=../templates/config.rc dest=/etc/monit/conf.d/config.rc owner=root group=root mode=0644'
+
+- name: 'monit | restart service'
+  service: name=monit state=restarted

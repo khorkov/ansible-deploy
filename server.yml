@@ -1,0 +1,78 @@
+- name: Create account
+  hosts: all
+  remote_user: root
+  roles:
+    - role: account
+
+- name: Install packages
+  hosts: all
+  remote_user: '{{ user }}'
+  become: true
+  roles:
+    - role: apt
+
+- name: Install rbenv & ruby
+  hosts: all
+  remote_user: '{{ user }}'
+  become: true
+  roles:
+    - role: rbenv
+
+- name: Setup postgresql
+  hosts: all
+  remote_user: '{{ user }}'
+  become: true
+  roles:
+    - role: postgresql
+      pg_version: 9.5
+      pg_encoding: 'UTF-8'
+      pg_locale: 'en_US.UTF-8'
+
+- name: Setup nginx
+  hosts: all
+  remote_user: '{{ user }}'
+  become: true
+  roles:
+    - role: nginx
+
+- name: Setup redis
+  hosts: all
+  remote_user: '{{ user }}'
+  become: true
+  roles:
+    - role: redis
+
+- name: Setup exim4
+  hosts: all
+  remote_user: '{{ user }}'
+  become: true
+  roles:
+    - role: exim4
+
+- name: Setup monit
+  hosts: all
+  remote_user: '{{ user }}'
+  become: true
+  roles:
+    - role: monit
+
+- name: Setup iptables
+  hosts: all
+  remote_user: '{{ user }}'
+  become: true
+  roles:
+    - role: iptables
+
+- name: Setup environment
+  hosts: all
+  remote_user: '{{ user }}'
+  become: true
+  roles:
+    - role: env
+
+- name: Setup ssh
+  hosts: all
+  remote_user: '{{ user }}'
+  become: true
+  roles:
+    - role: ssh

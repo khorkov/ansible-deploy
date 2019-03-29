@@ -1,0 +1,57 @@
+### Nginx ###
+check process nginx with pidfile /run/nginx.pid
+  start program = "/usr/sbin/service nginx start"
+  stop program = "/usr/sbin/service nginx stop"
+  if cpu > 60% for 2 cycles then alert
+  if cpu > 80% for 5 cycles then restart
+  if memory usage > 80% for 5 cycles then restart
+  if failed host 82.202.236.228 port 80 protocol http
+    then restart
+  if 3 restarts within 5 cycles then timeout
+
+### Postgresql ###
+check process postgresql
+  with pidfile "/var/run/postgresql/9.5-main.pid"
+  start program = "/usr/sbin/service postgresql start"
+  stop  program = "/usr/sbin/service postgresql stop"
+  if failed host localhost port 5432 protocol pgsql then restart
+  if cpu > 80% then restart
+  if memory usage > 80% for 2 cycles then restart
+  if 5 restarts within 5 cycles then timeout
+
+### Redis ###
+check process redis-server
+    with pidfile "/var/run/redis/redis-server.pid"
+    start program = "/usr/sbin/service redis start"
+    stop program = "/usr/sbin/service redis stop"
+    if totalmem > 100 Mb then alert
+    if children > 255 for 5 cycles then stop
+    if cpu usage > 95% for 3 cycles then restart
+    if memory usage > 80% for 5 cycles then restart
+    if failed host 127.0.0.1 port 6379 then restart
+    if 5 restarts within 5 cycles then timeout
+
+### Sidekiq ###
+check process sidekiq
+  with pidfile "/home/deployer/applications/usagle/shared/tmp/pids/sidekiq-0.pid"
+  start program = "/bin/su - deployer -c 'cd /home/deployer/applications/usagle/current && RBENV_ROOT=$HOME/.rbenv RBENV_VERSION=2.4.1 $HOME/.rbenv/bin/rbenv exec bundle exec sidekiq --index 0 --pidfile /home/deployer/applications/usagle/shared/tmp/pids/sidekiq-0.pid --environment production --logfile /home/deployer/applications/usagle/shared/log/sidekiq.log --daemon'"
+  stop program = "/bin/su - deployer -c 'cd /home/deployer/applications/usagle/current && RBENV_ROOT=$HOME/.rbenv RBENV_VERSION=2.4.1 $HOME/.rbenv/bin/rbenv exec bundle exec sidekiqctl stop /home/deployer/applications/usagle/shared/tmp/pids/sidekiq-0.pid 10'"
+  if cpu > 80% then restart
+  if memory usage > 80% for 2 cycles then restart
+  if 3 restarts within 3 cycles then timeout
+
+### Puma ###
+check process puma
+  with pidfile "/home/deployer/applications/usagle/shared/tmp/pids/puma.pid"
+  start program = "/bin/su - deployer -c 'cd /home/deployer/applications/usagle/current && RBENV_ROOT=$HOME/.rbenv RBENV_VERSION=2.4.1 $HOME/.rbenv/bin/rbenv exec bundle exec puma -C /home/deployer/applications/usagle/shared/puma.rb --daemon'"
+  stop program = "/bin/su - deployer -c 'cd /home/deployer/applications/usagle/current && RBENV_ROOT=$HOME/.rbenv RBENV_VERSION=2.4.1 $HOME/.rbenv/bin/rbenv exec bundle exec pumactl -S /home/deployer/applications/usagle/shared/tmp/pids/puma.state -C /home/deployer/applications/usagle/shared/puma.rb stop'"
+  if cpu > 80% then restart
+  if memory usage > 80% for 2 cycles then restart
+  if 3 restarts within 3 cycles then timeout
+
+### ssh ###
+check process ssh
+  with pidfile /var/run/sshd.pid
+  start program  "/etc/init.d/sshd start"
+  stop program  "/etc/init.d/sshd stop"
+  if failed port 22 protocol ssh then restart

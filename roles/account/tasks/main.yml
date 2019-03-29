@@ -1,0 +1,16 @@
+- name: 'account | create'
+  user: name={{ user }}
+        state=present
+        groups="sudo"
+        shell=/bin/bash
+
+- name: 'account | grant su priveleges'
+  lineinfile: dest=/etc/sudoers
+              state=present
+              regexp='^{{ user }} ALL\='
+              line='{{ user }} ALL=(ALL) NOPASSWD:ALL'
+              validate='visudo -cf %s'
+
+- name: 'account | copy ssh key'
+  authorized_key: user={{ user }}
+                  key="{{ lookup('file', '~/.ssh/id_rsa.pub') }}"

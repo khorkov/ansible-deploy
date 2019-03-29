@@ -1,0 +1,18 @@
+- hosts: rails
+  remote_user: root
+  become: true
+  become_method: sudo
+  gather_facts: no
+  pre_tasks:
+    - name: 'apt | update'
+      raw: 'apt-get update -y'
+
+    - name: 'python | install'
+      raw: apt-get -y install python-minimal
+  tasks:
+    - name: 'python | download pip'
+      get_url: url=https://bootstrap.pypa.io/get-pip.py dest=/get-pip.py
+    - name: 'python | install pip'
+      command: python /get-pip.py
+    - name: 'python | delete pip installation file'
+      file: dest=/get-pip.py state=absent

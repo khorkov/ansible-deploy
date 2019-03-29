@@ -1,0 +1,10 @@
+[rails]
+95.213.200.11
+
+[rails:vars]
+user=deployer
+ruby_version=2.4.1
+rbenv_root='{{ home }}/.rbenv'
+home='/home/{{ user }}'
+name='usagle'
+application='{{ home }}/applications/{{ name }}'

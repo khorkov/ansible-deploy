@@ -1,0 +1,2 @@
+- name: 'ssh | copy config'
+  copy: 'src=../templates/sshd_config dest=/etc/ssh/sshd_config owner=root group=root mode=0644'

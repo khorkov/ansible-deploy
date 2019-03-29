@@ -1,0 +1,8 @@
+- name: 'redis | copy config'
+  copy: 'src=../templates/redis.conf dest=/etc/redis/redis.conf owner=root group=root mode=0644'
+
+- name: 'redis | copy config'
+  copy: 'src=../templates/redis.conf.default dest=/etc/redis/redis.conf.default owner=root group=root mode=0644'
+
+- name: 'redis | restart service'
+  service: name=redis state=restarted

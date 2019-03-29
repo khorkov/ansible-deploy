@@ -1,0 +1,10 @@
+- name: 'iptables | copy config'
+  copy: 'src=../templates/iptables dest=/root/iptables owner=root group=root mode=0644'
+
+- file:
+    path: /root/iptables
+    state: file
+    mode: "u=rwx,g=r,o=r"      
+
+- name: 'rc.local | copy config'
+  copy: 'src=../templates/rc.local dest=/etc/rc.local owner=root group=root mode=0644'

@@ -1,0 +1,2 @@
+- name: 'env | copy .env.production'
+  template: 'src=../templates/.env.production dest={{ application }}/shared/.env.production owner={{ user }} group={{ user }} mode=0644'
